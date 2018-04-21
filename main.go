@@ -34,6 +34,9 @@ const (
 	PRINT
 	SETPX
 	PAINT
+	CLEAR
+	LD
+	ST
 	HALT
 )
 
@@ -46,15 +49,12 @@ type vm struct {
 
 	fp int
 
+	ram  []int
 	vram []uint8
 }
 
 func (v *vm) initVram() {
 	v.vram = make([]uint8, cols*rows)
-
-	for i := 0; i < cols*rows; i++ {
-		v.vram[i] = 0
-	}
 }
 
 func (v *vm) paint() {
@@ -85,6 +85,7 @@ func (v *vm) run(code []int, pc int) {
 
 	v.fp = -1
 
+	v.ram = make([]int, 1024)
 	v.initVram()
 
 	for {
@@ -177,6 +178,17 @@ func (v *vm) run(code []int, pc int) {
 		case PAINT:
 			v.paint()
 
+		case CLEAR:
+			v.initVram()
+
+		case LD:
+			addr := v.nextOp()
+			v.push(v.ram[addr])
+
+		case ST:
+			addr := v.nextOp()
+			v.ram[addr] = v.pop()
+
 		case HALT:
 			return
 		}
@@ -212,13 +224,32 @@ func (v *vm) peek() int {
 func main() {
 	code := []int{
 
+		// Initial state
 		PUSH, 2,
+		ST, 0,
 		PUSH, 2,
+		ST, 1,
+
+		LD, 0,
+		LD, 1,
 		PUSH, 0xff000000,
 		SETPX,
+		CLEAR,
 		PAINT,
+
+		LD, 0,
+		PUSH, 1,
+		ADD,
+		ST, 0,
+
+		LD, 1,
+		PUSH, 1,
+		ADD,
+		ST, 1,
+
 		SLEEP, 50,
-		JMP, 0,
+
+		JMP, 8,
 	}
 
 	v := &vm{}
