@@ -36,40 +36,27 @@ func main() {
 		return
 	}
 
-	sections := map[string][]string{}
-	section := ""
-
-	sc := bufio.NewScanner(r)
-	for sc.Scan() {
-		if strings.TrimSpace(sc.Text()) == "" {
-			continue
-		}
-
-		// instruction
-		if strings.HasPrefix(sc.Text(), "\t") || strings.HasPrefix(sc.Text(), " ") {
-			tokens := strings.Split(strings.TrimSpace(sc.Text()), " ")
-			sections[section] = append(sections[section], tokens...)
-			continue
-		}
-
-		// section def
-		section = strings.Trim(sc.Text(), ": ")
-		sections[section] = make([]string, 0)
-	}
-
-	// do the memory layout so we know the addresses
 	layout := []string{}
 	addrs := map[string]int{}
 	pc := 0
-	for s, toks := range sections {
-
-		// get the addresses
-		addrs[s] = pc
-
-		for _, t := range toks {
-			layout = append(layout, t)
-			pc++
+	sc := bufio.NewScanner(r)
+	for sc.Scan() {
+		trimmed := strings.TrimSpace(sc.Text())
+		if trimmed == "" || strings.HasPrefix(trimmed, "//") {
+			continue
 		}
+
+		if strings.HasPrefix(sc.Text(), "\t") || strings.HasPrefix(sc.Text(), " ") {
+			// instruction
+			tokens := strings.Split(trimmed, " ")
+			layout = append(layout, tokens...)
+			pc += len(tokens)
+			continue
+		}
+
+		// label
+		label := strings.Trim(sc.Text(), ": ")
+		addrs[label] = pc
 	}
 
 	// decode

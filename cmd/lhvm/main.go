@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
@@ -12,6 +13,9 @@ import (
 )
 
 func main() {
+	var debug bool
+	flag.BoolVar(&debug, "d", false, "debug mode")
+
 	flag.Parse()
 
 	fn := flag.Arg(0)
@@ -45,6 +49,14 @@ func main() {
 	}
 
 	v := &lhvm.VM{}
+
+	v.Log = ioutil.Discard
+	if debug {
+		lf, err := os.Create("debug.log")
+		if err == nil {
+			v.Log = lf
+		}
+	}
 
 	v.Run(code, entry)
 }

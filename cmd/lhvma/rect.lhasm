@@ -1,9 +1,19 @@
 main:
+	// x
 	PUSH 2
 	ST 0
+	
+	// dx
+	PUSH 1
+	ST 2
+
+	// y
 	PUSH 2
 	ST 1
-	JMP draw
+
+	// dy
+	PUSH 1
+	ST 3
 
 draw:
 	LD 0
@@ -16,15 +26,45 @@ draw:
 	PAINT
 	CLEAR
 
+checkx:
 	LD 0
-	PUSH 3
+	JMPLT 1 revx
+	LD 0
+	JMPGT 59 revx
+	JMP checky
+
+revx:
+	PUSH 0
+	LD 2
+	SUBT
+	ST 2
+	JMP checky
+
+checky:
+	LD 1
+	JMPLT 1 revy
+	LD 1
+	JMPGT 29 revy
+	JMP update
+
+revy:
+	PUSH 0
+	LD 3
+	SUBT
+	ST 3
+
+update:
+	LD 0
+	LD 2
 	ADD
 	ST 0
 
 	LD 1
-	PUSH 1
+	LD 3
 	ADD
 	ST 1
 
 	SLEEP 100
 	JMP draw
+
+	

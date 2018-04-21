@@ -3,6 +3,7 @@ package lhvm
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"time"
@@ -22,6 +23,7 @@ const (
 
 const (
 	PUSH = iota
+	POP
 	ADD
 	SUBT
 	SLEEP
@@ -40,10 +42,12 @@ const (
 	LD
 	ST
 	HALT
+	LOG
 )
 
 var Ops = map[string]int{
 	"PUSH":  PUSH,
+	"POP":   POP,
 	"ADD":   ADD,
 	"SUBT":  SUBT,
 	"SLEEP": SLEEP,
@@ -62,6 +66,7 @@ var Ops = map[string]int{
 	"LD":    LD,
 	"ST":    ST,
 	"HALT":  HALT,
+	"LOG":   LOG,
 }
 
 type VM struct {
@@ -75,6 +80,8 @@ type VM struct {
 
 	ram  []int
 	vram []uint8
+
+	Log io.Writer
 }
 
 func (v *VM) initVram() {
@@ -127,6 +134,9 @@ func (v *VM) Run(code []int, pc int) {
 		case PUSH:
 			v.push(v.nextOp())
 
+		case POP:
+			v.pop()
+
 		case ADD:
 			v.push(v.pop() + v.pop())
 
@@ -146,7 +156,7 @@ func (v *VM) Run(code []int, pc int) {
 			comp := v.nextOp()
 			addr := v.nextOp()
 
-			if v.peek() < comp {
+			if v.pop() < comp {
 				v.pc = addr
 			}
 
@@ -154,7 +164,7 @@ func (v *VM) Run(code []int, pc int) {
 			comp := v.nextOp()
 			addr := v.nextOp()
 
-			if v.peek() > comp {
+			if v.pop() > comp {
 				v.pc = addr
 			}
 
@@ -235,6 +245,11 @@ func (v *VM) Run(code []int, pc int) {
 
 		case HALT:
 			return
+
+		case LOG:
+			if v.sp > -1 {
+				fmt.Fprintf(v.Log, "%#v\n", v.stack[:v.sp])
+			}
 		}
 	}
 
