@@ -1,11 +1,30 @@
 package main
 
-import "fmt"
+import (
+	"bytes"
+	"fmt"
+	"os"
+	"os/exec"
+	"time"
+
+	"github.com/tomnomnom/xtermcolor"
+)
+
+const (
+	cols = 80
+	rows = 40
+)
+
+const (
+	escape = "\x1b"
+)
 
 const (
 	PUSH = iota
 	ADD
 	SUBT
+	SLEEP
+	JMP
 	JMPLT
 	JMPGT
 	JMPEQ
@@ -13,6 +32,8 @@ const (
 	RET
 	ARG
 	PRINT
+	SETPX
+	PAINT
 	HALT
 )
 
@@ -24,6 +45,35 @@ type vm struct {
 	sp    int
 
 	fp int
+
+	vram []uint8
+}
+
+func (v *vm) initVram() {
+	v.vram = make([]uint8, cols*rows)
+
+	for i := 0; i < cols*rows; i++ {
+		v.vram[i] = 0
+	}
+}
+
+func (v *vm) paint() {
+	buf := &bytes.Buffer{}
+	for y := 0; y < rows; y++ {
+		for x := 0; x < cols; x++ {
+			offset := (y * cols) + x
+			c := v.vram[offset]
+			buf.WriteString(fmt.Sprintf("%s[38;5;%dmX", escape, c))
+		}
+
+		buf.WriteRune('\n')
+	}
+
+	cmd := exec.Command("clear")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+
+	os.Stdout.Write(buf.Bytes())
 }
 
 func (v *vm) run(code []int, pc int) {
@@ -34,6 +84,8 @@ func (v *vm) run(code []int, pc int) {
 	v.sp = -1
 
 	v.fp = -1
+
+	v.initVram()
 
 	for {
 		switch v.nextOp() {
@@ -48,6 +100,13 @@ func (v *vm) run(code []int, pc int) {
 			b := v.pop()
 			a := v.pop()
 			v.push(a - b)
+
+		case SLEEP:
+			time.Sleep(time.Duration(v.nextOp() * 1000000))
+
+		case JMP:
+			addr := v.nextOp()
+			v.pc = addr
 
 		case JMPLT:
 			comp := v.nextOp()
@@ -107,9 +166,22 @@ func (v *vm) run(code []int, pc int) {
 		case PRINT:
 			fmt.Println(v.pop())
 
+		case SETPX:
+			c := v.pop()
+			y := v.pop()
+			x := v.pop()
+
+			offset := (y * cols) + x
+			v.vram[offset] = xtermcolor.FromInt(uint32(c))
+
+		case PAINT:
+			v.paint()
+
 		case HALT:
 			return
 		}
+
+		v.paint()
 	}
 
 }
@@ -139,22 +211,16 @@ func (v *vm) peek() int {
 
 func main() {
 	code := []int{
-		// sub @ 0
-		ARG, 0,
-		ARG, 1,
-		ADD,
-		RET,
 
-		// main
 		PUSH, 2,
 		PUSH, 2,
-		CALL, 0, 2,
-		PUSH, 1,
-		SUBT,
-		PRINT,
-		HALT,
+		PUSH, 0xff000000,
+		SETPX,
+		PAINT,
+		SLEEP, 50,
+		JMP, 0,
 	}
 
 	v := &vm{}
-	v.run(code, 6)
+	v.run(code, 0)
 }
