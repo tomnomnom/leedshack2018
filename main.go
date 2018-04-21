@@ -5,7 +5,10 @@ import "fmt"
 const (
 	PUSH = iota
 	ADD
-	SUB
+	SUBT
+	JMPLT
+	JMPGT
+	JMPEQ
 	PRINT
 	HALT
 )
@@ -27,16 +30,45 @@ func (v *vm) run(code []int) {
 
 	for {
 		switch v.nextOp() {
+
 		case PUSH:
 			v.push(v.nextOp())
+
 		case ADD:
 			v.push(v.pop() + v.pop())
-		case SUB:
+
+		case SUBT:
 			b := v.pop()
 			a := v.pop()
 			v.push(a - b)
+
+		case JMPLT:
+			comp := v.nextOp()
+			addr := v.nextOp()
+
+			if v.peek() < comp {
+				v.pc = addr
+			}
+
+		case JMPGT:
+			comp := v.nextOp()
+			addr := v.nextOp()
+
+			if v.peek() > comp {
+				v.pc = addr
+			}
+
+		case JMPEQ:
+			comp := v.nextOp()
+			addr := v.nextOp()
+
+			if v.peek() == comp {
+				v.pc = addr
+			}
+
 		case PRINT:
 			fmt.Println(v.pop())
+
 		case HALT:
 			return
 		}
@@ -61,13 +93,18 @@ func (v *vm) pop() int {
 	return val
 }
 
+func (v *vm) peek() int {
+	return v.stack[v.sp]
+}
+
 func main() {
 	code := []int{
 		PUSH, 2,
 		PUSH, 2,
 		ADD,
 		PUSH, 1,
-		SUB,
+		SUBT,
+		JMPEQ, 3, 2,
 		PRINT,
 		HALT,
 	}
