@@ -17,6 +17,7 @@ const (
 
 const (
 	escape = "\x1b"
+	char   = "█"
 )
 
 const (
@@ -33,6 +34,7 @@ const (
 	ARG
 	PRINT
 	SETPX
+	RECT
 	PAINT
 	CLEAR
 	LD
@@ -55,6 +57,15 @@ type vm struct {
 
 func (v *vm) initVram() {
 	v.vram = make([]uint8, cols*rows)
+
+	for i := 0; i < cols*rows; i++ {
+		v.vram[i] = 236
+	}
+}
+
+func (v *vm) setPixel(x, y, c int) {
+	offset := (y * cols) + x
+	v.vram[offset] = xtermcolor.FromInt(uint32(c))
 }
 
 func (v *vm) paint() {
@@ -63,7 +74,7 @@ func (v *vm) paint() {
 		for x := 0; x < cols; x++ {
 			offset := (y * cols) + x
 			c := v.vram[offset]
-			buf.WriteString(fmt.Sprintf("%s[38;5;%dmX", escape, c))
+			buf.WriteString(fmt.Sprintf("%s[38;5;%dm%s", escape, c, char))
 		}
 
 		buf.WriteRune('\n')
@@ -171,9 +182,20 @@ func (v *vm) run(code []int, pc int) {
 			c := v.pop()
 			y := v.pop()
 			x := v.pop()
+			v.setPixel(x, y, c)
 
-			offset := (y * cols) + x
-			v.vram[offset] = xtermcolor.FromInt(uint32(c))
+		case RECT:
+			color := v.pop()
+			h := v.pop()
+			w := v.pop()
+			y := v.pop()
+			x := v.pop()
+
+			for cY := y; cY < (y + h); cY++ {
+				for cX := x; cX < (x + w); cX++ {
+					v.setPixel(cX, cY, color)
+				}
+			}
 
 		case PAINT:
 			v.paint()
@@ -192,8 +214,6 @@ func (v *vm) run(code []int, pc int) {
 		case HALT:
 			return
 		}
-
-		v.paint()
 	}
 
 }
@@ -225,20 +245,24 @@ func main() {
 	code := []int{
 
 		// Initial state
-		PUSH, 2,
+		PUSH, 2, // x
 		ST, 0,
-		PUSH, 2,
+		PUSH, 2, // y
 		ST, 1,
 
-		LD, 0,
-		LD, 1,
-		PUSH, 0xff000000,
-		SETPX,
-		CLEAR,
+		LD, 0, // x
+		LD, 1, // y
+		PUSH, 20, // w
+		PUSH, 10, // h
+		PUSH, 0xff000000, // color
+		RECT,
+
 		PAINT,
+		CLEAR,
 
+		// new coords
 		LD, 0,
-		PUSH, 1,
+		PUSH, 3,
 		ADD,
 		ST, 0,
 
@@ -247,9 +271,9 @@ func main() {
 		ADD,
 		ST, 1,
 
-		SLEEP, 50,
-
+		SLEEP, 100,
 		JMP, 8,
+		HALT,
 	}
 
 	v := &vm{}
