@@ -42,6 +42,28 @@ const (
 	HALT
 )
 
+var Ops = map[string]int{
+	"PUSH":  PUSH,
+	"ADD":   ADD,
+	"SUBT":  SUBT,
+	"SLEEP": SLEEP,
+	"JMP":   JMP,
+	"JMPLT": JMPLT,
+	"JMPGT": JMPGT,
+	"JMPEQ": JMPEQ,
+	"CALL":  CALL,
+	"RET":   RET,
+	"ARG":   ARG,
+	"PRINT": PRINT,
+	"SETPX": SETPX,
+	"RECT":  RECT,
+	"PAINT": PAINT,
+	"CLEAR": CLEAR,
+	"LD":    LD,
+	"ST":    ST,
+	"HALT":  HALT,
+}
+
 type VM struct {
 	code []int
 	pc   int
