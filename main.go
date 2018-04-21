@@ -9,6 +9,9 @@ const (
 	JMPLT
 	JMPGT
 	JMPEQ
+	CALL
+	RET
+	ARG
 	PRINT
 	HALT
 )
@@ -19,14 +22,18 @@ type vm struct {
 
 	stack []int
 	sp    int
+
+	fp int
 }
 
-func (v *vm) run(code []int) {
+func (v *vm) run(code []int, pc int) {
 	v.code = code
-	v.pc = 0
+	v.pc = pc
 
 	v.stack = make([]int, 128)
 	v.sp = -1
+
+	v.fp = -1
 
 	for {
 		switch v.nextOp() {
@@ -66,6 +73,37 @@ func (v *vm) run(code []int) {
 				v.pc = addr
 			}
 
+		case CALL:
+			addr := v.nextOp()
+			nargs := v.nextOp()
+
+			v.push(nargs, v.fp, v.pc)
+
+			v.fp = v.sp
+			v.pc = addr
+
+		case RET:
+			val := v.pop()
+
+			// reset the stack
+			v.sp = v.fp
+
+			v.pc = v.pop()
+			v.fp = v.pop()
+			nargs := v.pop()
+
+			// ditch the args
+			for i := 0; i < nargs; i++ {
+				v.pop()
+			}
+
+			// put the return val at the top of the stack
+			v.push(val)
+
+		case ARG:
+			offset := (v.fp - v.nextOp()) - 3
+			v.push(v.stack[offset])
+
 		case PRINT:
 			fmt.Println(v.pop())
 
@@ -82,9 +120,11 @@ func (v *vm) nextOp() int {
 	return op
 }
 
-func (v *vm) push(n int) {
-	v.sp++
-	v.stack[v.sp] = n
+func (v *vm) push(nn ...int) {
+	for _, n := range nn {
+		v.sp++
+		v.stack[v.sp] = n
+	}
 }
 
 func (v *vm) pop() int {
@@ -99,16 +139,22 @@ func (v *vm) peek() int {
 
 func main() {
 	code := []int{
-		PUSH, 2,
-		PUSH, 2,
+		// sub @ 0
+		ARG, 0,
+		ARG, 1,
 		ADD,
+		RET,
+
+		// main
+		PUSH, 2,
+		PUSH, 2,
+		CALL, 0, 2,
 		PUSH, 1,
 		SUBT,
-		JMPEQ, 3, 2,
 		PRINT,
 		HALT,
 	}
 
 	v := &vm{}
-	v.run(code)
+	v.run(code, 6)
 }
