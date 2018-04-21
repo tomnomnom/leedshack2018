@@ -46,7 +46,7 @@ func main() {
 		}
 
 		// instruction
-		if strings.HasPrefix(sc.Text(), "\t") {
+		if strings.HasPrefix(sc.Text(), "\t") || strings.HasPrefix(sc.Text(), " ") {
 			tokens := strings.Split(strings.TrimSpace(sc.Text()), " ")
 			sections[section] = append(sections[section], tokens...)
 			continue
