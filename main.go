@@ -1,4 +1,4 @@
-package main
+package lhvm
 
 import (
 	"bytes"
@@ -42,7 +42,7 @@ const (
 	HALT
 )
 
-type vm struct {
+type VM struct {
 	code []int
 	pc   int
 
@@ -55,7 +55,7 @@ type vm struct {
 	vram []uint8
 }
 
-func (v *vm) initVram() {
+func (v *VM) initVram() {
 	v.vram = make([]uint8, cols*rows)
 
 	for i := 0; i < cols*rows; i++ {
@@ -63,12 +63,12 @@ func (v *vm) initVram() {
 	}
 }
 
-func (v *vm) setPixel(x, y, c int) {
+func (v *VM) setPixel(x, y, c int) {
 	offset := (y * cols) + x
 	v.vram[offset] = xtermcolor.FromInt(uint32(c))
 }
 
-func (v *vm) paint() {
+func (v *VM) paint() {
 	buf := &bytes.Buffer{}
 	for y := 0; y < rows; y++ {
 		for x := 0; x < cols; x++ {
@@ -87,7 +87,7 @@ func (v *vm) paint() {
 	os.Stdout.Write(buf.Bytes())
 }
 
-func (v *vm) run(code []int, pc int) {
+func (v *VM) Run(code []int, pc int) {
 	v.code = code
 	v.pc = pc
 
@@ -218,64 +218,25 @@ func (v *vm) run(code []int, pc int) {
 
 }
 
-func (v *vm) nextOp() int {
+func (v *VM) nextOp() int {
 	op := v.code[v.pc]
 	v.pc++
 	return op
 }
 
-func (v *vm) push(nn ...int) {
+func (v *VM) push(nn ...int) {
 	for _, n := range nn {
 		v.sp++
 		v.stack[v.sp] = n
 	}
 }
 
-func (v *vm) pop() int {
+func (v *VM) pop() int {
 	val := v.stack[v.sp]
 	v.sp--
 	return val
 }
 
-func (v *vm) peek() int {
+func (v *VM) peek() int {
 	return v.stack[v.sp]
-}
-
-func main() {
-	code := []int{
-
-		// Initial state
-		PUSH, 2, // x
-		ST, 0,
-		PUSH, 2, // y
-		ST, 1,
-
-		LD, 0, // x
-		LD, 1, // y
-		PUSH, 20, // w
-		PUSH, 10, // h
-		PUSH, 0xff000000, // color
-		RECT,
-
-		PAINT,
-		CLEAR,
-
-		// new coords
-		LD, 0,
-		PUSH, 3,
-		ADD,
-		ST, 0,
-
-		LD, 1,
-		PUSH, 1,
-		ADD,
-		ST, 1,
-
-		SLEEP, 100,
-		JMP, 8,
-		HALT,
-	}
-
-	v := &vm{}
-	v.run(code, 0)
 }

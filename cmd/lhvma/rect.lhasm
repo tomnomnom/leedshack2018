@@ -1,0 +1,30 @@
+main:
+	PUSH 2
+	ST 0
+	PUSH 2
+	ST 1
+	JMP draw
+
+draw:
+	LD 0
+	LD 1
+	PUSH 20
+	PUSH 10
+	PUSH 0xff000000
+	RECT
+
+	PAINT
+	CLEAR
+
+	LD 0
+	PUSH 3
+	ADD
+	ST 0
+
+	LD 1
+	PUSH 1
+	ADD
+	ST 1
+
+	SLEEP 100
+	JMP draw
