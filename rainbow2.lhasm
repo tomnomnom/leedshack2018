@@ -1,0 +1,99 @@
+main:
+    PUSH 0
+    ST 0
+    PUSH 0
+    ST 1
+    PUSH 100
+    ST 2
+    PUSH 40
+    ST 3
+    PUSH 1
+    ST 4
+    PUSH 0xff000000
+    ST 5
+
+draw:
+    LD 0
+    LD 1
+    LD 2
+    LD 3
+    LD 5
+    RECT
+
+    PAINT
+    SLEEP 100
+    CALL update 0
+    POP
+    LD 3
+    JMPGT 1 draw
+
+    CLEAR
+    JMP main
+    HALT
+
+update:
+    LD 0
+    PUSH 2
+    ADD
+    ST 0
+
+    LD 1
+    PUSH 2
+    ADD
+    ST 1
+
+    LD 2
+    PUSH 4
+    SUBT
+    ST 2
+
+    LD 3
+    PUSH 4
+    SUBT
+    ST 3
+
+    LD 4
+    JMPEQ 1 col1
+    LD 4
+    JMPEQ 2 col2
+    LD 4
+    JMPEQ 3 col3
+    LD 4
+    JMPEQ 4 col4
+    LD 4
+    JMPEQ 5 col5
+    LD 4
+    JMPEQ 6 col6
+    LD 4
+    JMPEQ 7 col7
+
+col1:
+    PUSH 1
+    ST 4
+    PUSH 0xff000000
+    JMP stcol
+col2:
+    PUSH 0xf4a64100
+    JMP stcol
+col3:
+    PUSH 0xffee0c00
+    JMP stcol
+col4:
+    PUSH 0x81ff0c00
+    JMP stcol
+col5:
+    PUSH 0x0cbeff00
+    JMP stcol
+col6:
+    PUSH 0x480cff00
+    JMP stcol
+col7:
+    PUSH 0xda0cff00
+    JMP stcol
+stcol:
+    ST 5
+    LD 4
+    PUSH 1
+    ADD
+    ST 4
+    RET

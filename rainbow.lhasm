@@ -1,0 +1,52 @@
+main:
+    PUSH 0
+    PUSH 0
+    PUSH 100
+    PUSH 40
+    PUSH 0xff000000
+    RECT
+
+    PUSH 2
+    PUSH 2
+    PUSH 96
+    PUSH 36
+    PUSH 0xf4a64100
+    RECT
+
+    PUSH 4
+    PUSH 4
+    PUSH 92
+    PUSH 32
+    PUSH 0xffee0c00
+    RECT
+
+    PUSH 6
+    PUSH 6
+    PUSH 88
+    PUSH 28
+    PUSH 0x81ff0c00
+    RECT
+
+    PUSH 8
+    PUSH 8
+    PUSH 84
+    PUSH 24
+    PUSH 0x0cbeff00
+    RECT
+
+    PUSH 10
+    PUSH 10
+    PUSH 80
+    PUSH 20
+    PUSH 0x480cff00
+    RECT
+
+    PUSH 12
+    PUSH 12
+    PUSH 76
+    PUSH 16
+    PUSH 0xda0cff00
+    RECT
+
+    PAINT
+    HALT

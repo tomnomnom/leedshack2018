@@ -1,0 +1,14 @@
+main:
+    PUSH 2
+    PUSH 2
+    CALL ownadd 2
+    PUSH 1
+    SUBT
+    PRINT
+    HALT
+
+ownadd:
+    ARG 0
+    ARG 1
+    ADD
+    RET
