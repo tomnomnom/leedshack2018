@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	cols = 80
+	cols = 100
 	rows = 40
 )
 

@@ -1,0 +1,812 @@
+main:
+	// x
+	PUSH 2
+	ST 0
+
+	// dx
+	PUSH 1
+	ST 1
+
+	// y
+	PUSH 4
+	ST 2
+
+	// dy
+	PUSH 1
+	ST 3
+
+draw:
+	LD 0
+	LD 2
+	CALL logo 2
+	POP
+	PAINT
+	SLEEP 50
+	CLEAR
+
+checkX:
+	LD 0
+	JMPLT 1 revX
+	LD 0
+	JMPGT 53 revX
+	JMP checkY
+
+revX:
+	PUSH 0
+	LD 1
+	SUBT
+	ST 1
+	JMP checkY
+
+checkY:
+	LD 2
+	JMPLT 1 revY
+	LD 2
+	JMPGT 32 revY
+	JMP update
+
+revY:
+	PUSH 0
+	LD 3
+	SUBT
+	ST 3
+	JMP update
+
+update:
+	LD 0
+	LD 1
+	ADD
+	ST 0
+
+	LD 2
+	LD 3
+	ADD
+	ST 2
+	JMP draw
+
+logo:
+    PUSH 2
+    ARG 1
+    ADD
+    PUSH 0
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 43
+    ARG 1
+    ADD
+    PUSH 0
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 1
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 4
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 8
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 11
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 12
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 13
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 14
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 18
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 19
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 20
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 21
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 26
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 30
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 31
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 32
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 33
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 37
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 38
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 39
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 40
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 44
+    ARG 1
+    ADD
+    PUSH 1
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 1
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 4
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 8
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 10
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 15
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 17
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 22
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 25
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 26
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 29
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 34
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 35
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 36
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 41
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 44
+    ARG 1
+    ADD
+    PUSH 2
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 0
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 4
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 5
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 6
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 7
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 8
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 10
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 11
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 12
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 13
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 14
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 15
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 17
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 26
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 29
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 34
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 36
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 41
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 45
+    ARG 1
+    ADD
+    PUSH 3
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 1
+    ARG 1
+    ADD
+    PUSH 4
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 4
+    ARG 1
+    ADD
+    PUSH 4
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 8
+    ARG 1
+    ADD
+    PUSH 4
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 10
+    ARG 1
+    ADD
+    PUSH 4
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 15
+    ARG 1
+    ADD
+    PUSH 4
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 17
+    ARG 1
+    ADD
+    PUSH 4
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 22
+    ARG 1
+    ADD
+    PUSH 4
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 26
+    ARG 1
+    ADD
+    PUSH 4
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 29
+    ARG 1
+    ADD
+    PUSH 4
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 34
+    ARG 1
+    ADD
+    PUSH 4
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 36
+    ARG 1
+    ADD
+    PUSH 4
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 41
+    ARG 1
+    ADD
+    PUSH 4
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 44
+    ARG 1
+    ADD
+    PUSH 4
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 1
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 4
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 8
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 10
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 15
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 18
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 19
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 20
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 21
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 25
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 26
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 27
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 30
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 31
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 32
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 33
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 37
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 38
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 39
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 40
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 44
+    ARG 1
+    ADD
+    PUSH 5
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 2
+    ARG 1
+    ADD
+    PUSH 6
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    PUSH 43
+    ARG 1
+    ADD
+    PUSH 6
+    ARG 0
+    ADD
+    PUSH 0xf7d21800
+    SETPX
+    RET
