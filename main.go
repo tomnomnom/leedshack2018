@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"math"
 	"os"
 	"os/exec"
 	"time"
@@ -26,6 +27,7 @@ const (
 	POP
 	ADD
 	SUBT
+	SIN
 	SLEEP
 	JMP
 	JMPLT
@@ -50,6 +52,7 @@ var Ops = map[string]int{
 	"POP":   POP,
 	"ADD":   ADD,
 	"SUBT":  SUBT,
+	"SIN":   SIN,
 	"SLEEP": SLEEP,
 	"JMP":   JMP,
 	"JMPLT": JMPLT,
@@ -144,6 +147,11 @@ func (v *VM) Run(code []int, pc int) {
 			b := v.pop()
 			a := v.pop()
 			v.push(a - b)
+
+		case SIN:
+			val := v.pop()
+			s := int((math.Sin(float64(val)/360*cols) * (rows / 4)))
+			v.push(s)
 
 		case SLEEP:
 			time.Sleep(time.Duration(v.nextOp() * 1000000))

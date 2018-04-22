@@ -1,0 +1,25 @@
+main:
+    CLEAR
+    PUSH 1
+    ST 0
+
+draw:
+    LD 0
+    LD 0
+    SIN
+    PUSH 20
+    ADD
+    PUSH 0x00ff0000
+    SETPX
+    PAINT
+    SLEEP 50
+
+    LD 0
+    PUSH 1
+    ADD
+    ST 0
+    
+    LD 0
+    JMPGT 99 main
+    JMP draw
+
